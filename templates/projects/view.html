@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}{{ project['name'] }} — Flashcards{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>{{ project['name'] }}</h1>
+    <div class="header-actions">
+        <a class="btn"
+           href="{{ url_for('flashcards.create_card',
+                            project_id=project['id']) }}">
+            Add Card
+        </a>
+        <a class="btn btn-secondary"
+           href="{{ url_for('projects.edit_project',
+                            project_id=project['id']) }}">
+            Edit
+        </a>
+        <form method="post"
+              action="{{ url_for('projects.delete_project',
+                                 project_id=project['id']) }}">
+            <input type="hidden" name="_csrf_token"
+                   value="{{ csrf_token() }}">
+            <button type="submit" class="btn btn-danger"
+                    onclick="return confirm('Delete this project and all its cards?')">
+                Delete
+            </button>
+        </form>
+    </div>
+</div>
+
+{% if cards %}
+    <table class="cards-table">
+        <thead>
+            <tr>
+                <th>Front</th>
+                <th>Back</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in cards %}
+                <tr>
+                    <td>{{ c['front'] }}</td>
+                    <td>{{ c['back'] }}</td>
+                    <td class="actions">
+                        <a href="{{ url_for('flashcards.edit_card',
+                                            project_id=project['id'],
+                                            card_id=c['id']) }}">
+                            Edit
+                        </a>
+                        <form method="post"
+                              action="{{ url_for(
+                                  'flashcards.delete_card',
+                                  project_id=project['id'],
+                                  card_id=c['id']) }}">
+                            <input type="hidden" name="_csrf_token"
+                                   value="{{ csrf_token() }}">
+                            <button type="submit" class="link-danger">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p class="empty">No flashcards yet. Add one above.</p>
+{% endif %}
+{% endblock %}

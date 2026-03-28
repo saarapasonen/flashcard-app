@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Add Card — Flashcards{% endblock %}
+
+{% block content %}
+<div class="form-page">
+    <h1>Add Card to {{ project['name'] }}</h1>
+    <form method="post">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+        <label for="front">Front</label>
+        <textarea id="front" name="front" rows="3" required></textarea>
+        <label for="back">Back</label>
+        <textarea id="back" name="back" rows="3" required></textarea>
+        <button type="submit">Add Card</button>
+    </form>
+</div>
+{% endblock %}

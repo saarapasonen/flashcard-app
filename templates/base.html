@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Flashcards{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <a class="nav-brand" href="{{ url_for('projects.list_projects') }}">
+            Flashcards
+        </a>
+        <div class="nav-links">
+            {% if session.get('user_id') %}
+                <form class="search-form" action="{{ url_for('search.search') }}"
+                      method="get">
+                    <input type="text" name="q" placeholder="Search cards..."
+                           value="{{ request.args.get('q', '') }}">
+                    <button type="submit">Search</button>
+                </form>
+                <span class="nav-user">{{ session['username'] }}</span>
+                <a href="{{ url_for('auth.logout') }}">Log out</a>
+            {% else %}
+                <a href="{{ url_for('auth.login') }}">Log in</a>
+                <a href="{{ url_for('auth.register') }}">Register</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <main class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash flash-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Search — Flashcards{% endblock %}
+
+{% block content %}
+<h1>Search Results</h1>
+
+{% if query %}
+    {% if not projects and not cards %}
+        <p class="empty">
+            No results for "<strong>{{ query }}</strong>".
+        </p>
+    {% endif %}
+
+    {% if projects %}
+        <h2>Projects</h2>
+        <div class="project-grid">
+            {% for p in projects %}
+                <div class="card">
+                    <h2>
+                        <a href="{{ url_for('projects.view_project',
+                                            project_id=p['id']) }}">
+                            {{ p['name'] }}
+                        </a>
+                    </h2>
+                    <p class="meta">Created {{ p['created_at'] }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if cards %}
+        <h2>Flashcards</h2>
+        <p>{{ cards|length }} card{{ 's' if cards|length != 1 }}
+           matching "<strong>{{ query }}</strong>"</p>
+        <table class="cards-table">
+            <thead>
+                <tr>
+                    <th>Project</th>
+                    <th>Front</th>
+                    <th>Back</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in cards %}
+                    <tr>
+                        <td>
+                            <a href="{{ url_for(
+                                'projects.view_project',
+                                project_id=r['project_id']) }}">
+                                {{ r['project_name'] }}
+                            </a>
+                        </td>
+                        <td>{{ r['front'] }}</td>
+                        <td>{{ r['back'] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% else %}
+    <p class="empty">
+        Enter a keyword above to search your projects and flashcards.
+    </p>
+{% endif %}
+{% endblock %}
