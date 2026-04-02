@@ -24,6 +24,9 @@ source venv/bin/activate
 # Install Flask
 pip install flask
 
+# Initialize the database
+sqlite3 database.db < schema.sql
+
 # Run the application
 flask run
 ```
@@ -37,12 +40,17 @@ flashcards/
 ├── app.py              # Application entry point
 ├── db.py               # Database helpers
 ├── csrf.py             # CSRF protection
+├── auth_utils.py       # Shared authentication helpers
 ├── schema.sql          # Database schema
 ├── routes/
 │   ├── auth.py         # Registration, login, logout
 │   ├── projects.py     # Project CRUD
 │   ├── flashcards.py   # Flashcard CRUD
 │   └── search.py       # Keyword search
+├── repositories/
+│   ├── users.py        # User database queries
+│   ├── projects_repo.py # Project database queries
+│   └── flashcards_repo.py # Flashcard database queries
 ├── templates/          # Jinja2 HTML templates
 ├── static/
 │   └── style.css       # CSS
