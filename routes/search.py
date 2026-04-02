@@ -1,23 +1,10 @@
 from flask import (
-    Blueprint, render_template, request, session,
-    flash, redirect, url_for
+    Blueprint, render_template, request, session
 )
-from db import get_db
+from auth_utils import login_required
+from repositories import projects_repo, flashcards_repo
 
 search_bp = Blueprint("search", __name__)
-
-
-def login_required(f):
-    """Redirect to login if the user is not authenticated."""
-    from functools import wraps
-
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        if "user_id" not in session:
-            flash("Please log in first.", "error")
-            return redirect(url_for("auth.login"))
-        return f(*args, **kwargs)
-    return decorated
 
 
 @search_bp.route("/search")
@@ -28,24 +15,10 @@ def search():
     cards = []
 
     if query:
-        db = get_db()
-        like = f"%{query}%"
-        projects = db.execute(
-            "SELECT id, name, created_at FROM projects "
-            "WHERE user_id = ? AND name LIKE ? "
-            "ORDER BY name",
-            (session["user_id"], like),
-        ).fetchall()
-        cards = db.execute(
-            "SELECT f.id AS card_id, f.front, f.back, "
-            "       p.id AS project_id, p.name AS project_name "
-            "FROM flashcards f "
-            "JOIN projects p ON f.project_id = p.id "
-            "WHERE p.user_id = ? "
-            "  AND (f.front LIKE ? OR f.back LIKE ?) "
-            "ORDER BY p.name, f.id",
-            (session["user_id"], like, like),
-        ).fetchall()
+        projects = projects_repo.search_by_name(
+            session["user_id"], query
+        )
+        cards = flashcards_repo.search(session["user_id"], query)
 
     return render_template(
         "search/results.html",

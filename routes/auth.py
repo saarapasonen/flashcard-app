@@ -2,9 +2,9 @@ from flask import (
     Blueprint, render_template, request,
     redirect, url_for, session, flash
 )
-from werkzeug.security import generate_password_hash, check_password_hash
-from db import get_db
+from werkzeug.security import check_password_hash
 from csrf import validate_csrf
+from repositories import users
 
 auth_bp = Blueprint("auth", __name__)
 
@@ -25,21 +25,11 @@ def register():
             flash("Passwords do not match.", "error")
             return render_template("auth/register.html")
 
-        db = get_db()
-        existing = db.execute(
-            "SELECT id FROM users WHERE username = ?",
-            (username,),
-        ).fetchone()
-
-        if existing:
+        if users.find_by_username(username):
             flash("Username already taken.", "error")
             return render_template("auth/register.html")
 
-        db.execute(
-            "INSERT INTO users (username, password) VALUES (?, ?)",
-            (username, generate_password_hash(password, method="pbkdf2:sha256")),
-        )
-        db.commit()
+        users.create(username, password)
         flash("Account created. Please log in.", "success")
         return redirect(url_for("auth.login"))
 
@@ -53,12 +43,7 @@ def login():
         username = request.form.get("username", "").strip()
         password = request.form.get("password", "").strip()
 
-        db = get_db()
-        user = db.execute(
-            "SELECT id, username, password FROM users "
-            "WHERE username = ?",
-            (username,),
-        ).fetchone()
+        user = users.find_by_username(username)
 
         if user and check_password_hash(user["password"], password):
             session["user_id"] = user["id"]
