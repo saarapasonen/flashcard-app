@@ -12,6 +12,18 @@
         <label for="back">Back</label>
         <textarea id="back" name="back" rows="3"
                   required>{{ card['back'] }}</textarea>
+        <label for="difficulty">Difficulty</label>
+        <select id="difficulty" name="difficulty">
+            <option value="easy"
+                {% if card['difficulty'] == 'easy' %}selected{% endif %}>
+                Easy</option>
+            <option value="medium"
+                {% if card['difficulty'] == 'medium' %}selected{% endif %}>
+                Medium</option>
+            <option value="hard"
+                {% if card['difficulty'] == 'hard' %}selected{% endif %}>
+                Hard</option>
+        </select>
         <button type="submit">Save</button>
     </form>
 </div>

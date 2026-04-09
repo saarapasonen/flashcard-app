@@ -29,6 +29,9 @@ def create_card(project_id):
     if request.method == "POST":
         front = request.form.get("front", "").strip()
         back = request.form.get("back", "").strip()
+        difficulty = request.form.get("difficulty", "medium")
+        if difficulty not in ("easy", "medium", "hard"):
+            difficulty = "medium"
 
         if not front or not back:
             flash("Both front and back are required.", "error")
@@ -36,7 +39,7 @@ def create_card(project_id):
                 "flashcards/create.html", project=project
             )
 
-        flashcards_repo.create(project_id, front, back)
+        flashcards_repo.create(project_id, front, back, difficulty)
         flash("Flashcard added.", "success")
         return redirect(
             url_for(
@@ -65,6 +68,9 @@ def edit_card(project_id, card_id):
     if request.method == "POST":
         front = request.form.get("front", "").strip()
         back = request.form.get("back", "").strip()
+        difficulty = request.form.get("difficulty", "medium")
+        if difficulty not in ("easy", "medium", "hard"):
+            difficulty = "medium"
 
         if not front or not back:
             flash("Both front and back are required.", "error")
@@ -74,7 +80,7 @@ def edit_card(project_id, card_id):
                 card=card,
             )
 
-        flashcards_repo.update(card_id, front, back)
+        flashcards_repo.update(card_id, front, back, difficulty)
         flash("Flashcard updated.", "success")
         return redirect(
             url_for(

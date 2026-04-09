@@ -34,6 +34,7 @@
             <tr>
                 <th>Front</th>
                 <th>Back</th>
+                <th>Difficulty</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -42,6 +43,11 @@
                 <tr>
                     <td>{{ c['front'] }}</td>
                     <td>{{ c['back'] }}</td>
+                    <td>
+                        <span class="badge badge-{{ c['difficulty'] }}">
+                            {{ c['difficulty']|capitalize }}
+                        </span>
+                    </td>
                     <td class="actions">
                         <a href="{{ url_for('flashcards.edit_card',
                                             project_id=project['id'],

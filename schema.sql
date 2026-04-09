@@ -15,7 +15,9 @@ CREATE TABLE IF NOT EXISTS flashcards (
     id         INTEGER PRIMARY KEY AUTOINCREMENT,
     project_id INTEGER NOT NULL REFERENCES projects(id),
     front      TEXT NOT NULL,
-    back       TEXT NOT NULL
+    back       TEXT NOT NULL,
+    difficulty TEXT NOT NULL DEFAULT 'medium'
+        CHECK (difficulty IN ('easy', 'medium', 'hard'))
 );
 
 CREATE INDEX IF NOT EXISTS idx_projects_user_id
