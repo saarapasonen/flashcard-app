@@ -20,6 +20,30 @@ CREATE TABLE IF NOT EXISTS flashcards (
         CHECK (difficulty IN ('easy', 'medium', 'hard'))
 );
 
+CREATE TABLE IF NOT EXISTS study_sessions (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id     INTEGER NOT NULL REFERENCES users(id),
+    project_id  INTEGER NOT NULL REFERENCES projects(id),
+    total_cards INTEGER NOT NULL,
+    correct     INTEGER NOT NULL DEFAULT 0,
+    completed   INTEGER NOT NULL DEFAULT 0,
+    created_at  TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS session_answers (
+    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    session_id INTEGER NOT NULL REFERENCES study_sessions(id),
+    card_id    INTEGER NOT NULL REFERENCES flashcards(id),
+    known      INTEGER NOT NULL DEFAULT 0
+);
+
+CREATE INDEX IF NOT EXISTS idx_sessions_user
+    ON study_sessions(user_id);
+CREATE INDEX IF NOT EXISTS idx_sessions_project
+    ON study_sessions(project_id);
+CREATE INDEX IF NOT EXISTS idx_session_answers_session
+    ON session_answers(session_id);
+
 CREATE INDEX IF NOT EXISTS idx_projects_user_id
     ON projects(user_id);
 CREATE INDEX IF NOT EXISTS idx_flashcards_project

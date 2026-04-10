@@ -126,8 +126,19 @@ a:hover {
 
 .header-actions {
     display: flex;
-    align-items: center;
+    align-items: stretch;
     gap: 0.5rem;
+}
+
+.header-actions .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    font-family: inherit;
+    line-height: 1.4;
+    white-space: nowrap;
 }
 
 /* ── Buttons ────────────────────────────────────────── */
@@ -154,6 +165,14 @@ a:hover {
 
 .btn-secondary:hover {
     background: #475569;
+}
+
+.btn-success {
+    background: #16a34a;
+}
+
+.btn-success:hover {
+    background: #15803d;
 }
 
 .btn-danger {
@@ -309,6 +328,89 @@ a:hover {
 .badge-hard {
     background: #fee2e2;
     color: #991b1b;
+}
+
+/* ── Study session ─────────────────────────────────── */
+.study-page {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.study-progress {
+    text-align: center;
+    color: #64748b;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.study-card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+}
+
+.study-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+}
+
+.study-text {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.study-back {
+    border-top: 1px solid #e2e8f0;
+    padding-top: 1.5rem;
+    margin-top: 0.5rem;
+}
+
+.study-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+/* ── Results ───────────────────────────────────────── */
+.results-page {
+    max-width: 500px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.results-page h1 {
+    margin-bottom: 0.25rem;
+}
+
+.results-project {
+    color: #64748b;
+    margin-bottom: 1.5rem;
+}
+
+.results-score {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.results-percentage {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #2563eb;
+}
+
+.results-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
 }
 
 /* ── Empty state ────────────────────────────────────── */

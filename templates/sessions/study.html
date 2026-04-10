@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Study — {{ project['name'] }}{% endblock %}
+
+{% block content %}
+<div class="study-page">
+    <p class="study-progress">
+        Card {{ progress }} of {{ total }}
+    </p>
+
+    <div class="study-card">
+        <div class="study-front">
+            <p class="study-label">Front</p>
+            <p class="study-text">{{ card['front'] }}</p>
+        </div>
+
+        {% if revealed %}
+            <div class="study-back">
+                <p class="study-label">Back</p>
+                <p class="study-text">{{ card['back'] }}</p>
+            </div>
+
+            <div class="study-actions">
+                <form method="post"
+                      action="{{ url_for('sessions.answer_card',
+                          project_id=project['id'],
+                          session_id=session_id) }}">
+                    <input type="hidden" name="_csrf_token"
+                           value="{{ csrf_token() }}">
+                    <input type="hidden" name="card_id"
+                           value="{{ card['id'] }}">
+                    <input type="hidden" name="known" value="0">
+                    <button type="submit"
+                            class="btn btn-danger">
+                        I don't know this yet
+                    </button>
+                </form>
+                <form method="post"
+                      action="{{ url_for('sessions.answer_card',
+                          project_id=project['id'],
+                          session_id=session_id) }}">
+                    <input type="hidden" name="_csrf_token"
+                           value="{{ csrf_token() }}">
+                    <input type="hidden" name="card_id"
+                           value="{{ card['id'] }}">
+                    <input type="hidden" name="known" value="1">
+                    <button type="submit"
+                            class="btn btn-success">
+                        I know this
+                    </button>
+                </form>
+            </div>
+        {% else %}
+            <form method="post"
+                  action="{{ url_for('sessions.reveal_card',
+                      project_id=project['id'],
+                      session_id=session_id) }}">
+                <input type="hidden" name="_csrf_token"
+                       value="{{ csrf_token() }}">
+                <input type="hidden" name="card_id"
+                       value="{{ card['id'] }}">
+                <button type="submit" class="btn">
+                    Show Answer
+                </button>
+            </form>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

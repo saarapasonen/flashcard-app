@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Results — {{ project['name'] }}{% endblock %}
+
+{% block content %}
+<div class="results-page">
+    <h1>Session Complete</h1>
+    <p class="results-project">{{ project['name'] }}</p>
+
+    <div class="results-score">
+        <span class="results-percentage">{{ percentage }}%</span>
+        <p>{{ correct }} out of {{ total }} cards correct</p>
+    </div>
+
+    <div class="results-actions">
+        <a class="btn"
+           href="{{ url_for('projects.view_project',
+                            project_id=project['id']) }}">
+            Back to Project
+        </a>
+    </div>
+</div>
+{% endblock %}
