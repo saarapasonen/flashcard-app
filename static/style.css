@@ -124,21 +124,37 @@ a:hover {
     margin-bottom: 1.5rem;
 }
 
-.header-actions {
+/* ── Project view sections ──────────────────────────── */
+.study-actions {
     display: flex;
-    align-items: stretch;
+    align-items: center;
     gap: 0.5rem;
 }
 
-.header-actions .btn {
+.project-manage {
+    display: flex;
+    align-items: stretch;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.project-manage .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
+    white-space: nowrap;
+    min-width: 120px;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.8rem;
     font-family: inherit;
     line-height: 1.4;
-    white-space: nowrap;
+    box-sizing: border-box;
+}
+
+.cards-header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 0.75rem;
 }
 
 /* ── Buttons ────────────────────────────────────────── */
@@ -181,6 +197,18 @@ a:hover {
 
 .btn-danger:hover {
     background: #b91c1c;
+}
+
+.btn-lg {
+    padding: 0.65rem 1.5rem;
+    font-size: 1rem;
+    font-family: inherit;
+}
+
+.btn-sm {
+    padding: 0.35rem 0.75rem;
+    font-size: 0.8rem;
+    font-family: inherit;
 }
 
 /* ── Project grid ───────────────────────────────────── */

@@ -41,8 +41,16 @@ CREATE INDEX IF NOT EXISTS idx_sessions_user
     ON study_sessions(user_id);
 CREATE INDEX IF NOT EXISTS idx_sessions_project
     ON study_sessions(project_id);
+CREATE TABLE IF NOT EXISTS session_cards (
+    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    session_id INTEGER NOT NULL REFERENCES study_sessions(id),
+    card_id    INTEGER NOT NULL REFERENCES flashcards(id)
+);
+
 CREATE INDEX IF NOT EXISTS idx_session_answers_session
     ON session_answers(session_id);
+CREATE INDEX IF NOT EXISTS idx_session_cards_session
+    ON session_cards(session_id);
 
 CREATE INDEX IF NOT EXISTS idx_projects_user_id
     ON projects(user_id);

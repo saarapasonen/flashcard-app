@@ -50,6 +50,49 @@ def start_session(project_id):
 
 
 @sessions_bp.route(
+    "/projects/<int:project_id>/continue",
+    methods=["POST"],
+)
+@login_required
+@validate_csrf
+def continue_session(project_id):
+    get_owned_project(project_id)
+    latest = sessions_repo.get_latest_session(
+        session["user_id"], project_id
+    )
+
+    if not latest:
+        flash("No previous session to continue from.", "error")
+        return redirect(
+            url_for(
+                "projects.view_project", project_id=project_id
+            )
+        )
+
+    unknown_ids = sessions_repo.get_unknown_card_ids(latest["id"])
+    if not unknown_ids:
+        flash("You knew all cards in your last session!", "success")
+        return redirect(
+            url_for(
+                "projects.view_project", project_id=project_id
+            )
+        )
+
+    session_id = sessions_repo.create_session(
+        session["user_id"], project_id, len(unknown_ids)
+    )
+    sessions_repo.add_session_cards(session_id, unknown_ids)
+
+    return redirect(
+        url_for(
+            "sessions.study_card",
+            project_id=project_id,
+            session_id=session_id,
+        )
+    )
+
+
+@sessions_bp.route(
     "/projects/<int:project_id>/study/<int:session_id>",
 )
 @login_required
@@ -60,7 +103,18 @@ def study_card(project_id, session_id):
     if not study or study["user_id"] != session["user_id"]:
         abort(404)
 
-    cards = flashcards_repo.get_by_project(project_id)
+    session_card_ids = sessions_repo.get_session_card_ids(
+        session_id
+    )
+    all_cards = flashcards_repo.get_by_project(project_id)
+
+    if session_card_ids:
+        cards = [
+            c for c in all_cards if c["id"] in session_card_ids
+        ]
+    else:
+        cards = all_cards
+
     answered_ids = sessions_repo.get_answered_card_ids(session_id)
     remaining = [c for c in cards if c["id"] not in answered_ids]
 
@@ -106,7 +160,17 @@ def reveal_card(project_id, session_id):
     if not card:
         abort(404)
 
-    cards = flashcards_repo.get_by_project(project_id)
+    session_card_ids = sessions_repo.get_session_card_ids(
+        session_id
+    )
+    all_cards = flashcards_repo.get_by_project(project_id)
+    if session_card_ids:
+        cards = [
+            c for c in all_cards if c["id"] in session_card_ids
+        ]
+    else:
+        cards = all_cards
+
     answered_ids = sessions_repo.get_answered_card_ids(session_id)
     progress = len(answered_ids) + 1
     total = len(cards)

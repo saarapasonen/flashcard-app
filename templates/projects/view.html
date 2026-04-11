@@ -4,7 +4,7 @@
 {% block content %}
 <div class="page-header">
     <h1>{{ project['name'] }}</h1>
-    <div class="header-actions">
+    <div class="study-actions">
         <form method="post"
               action="{{ url_for('sessions.start_session',
                                  project_id=project['id']) }}">
@@ -14,27 +14,42 @@
                 Study
             </button>
         </form>
-        <a class="btn"
-           href="{{ url_for('flashcards.create_card',
-                            project_id=project['id']) }}">
-            Add Card
-        </a>
-        <a class="btn btn-secondary"
-           href="{{ url_for('projects.edit_project',
-                            project_id=project['id']) }}">
-            Edit
-        </a>
         <form method="post"
-              action="{{ url_for('projects.delete_project',
+              action="{{ url_for('sessions.continue_session',
                                  project_id=project['id']) }}">
             <input type="hidden" name="_csrf_token"
                    value="{{ csrf_token() }}">
-            <button type="submit" class="btn btn-danger"
-                    onclick="return confirm('Delete this project and all its cards?')">
-                Delete
+            <button type="submit" class="btn btn-secondary">
+                Continue
             </button>
         </form>
     </div>
+</div>
+
+<div class="project-manage">
+    <a class="btn btn-secondary btn-sm"
+       href="{{ url_for('projects.edit_project',
+                        project_id=project['id']) }}">
+        Edit Project
+    </a>
+    <form method="post"
+          action="{{ url_for('projects.delete_project',
+                             project_id=project['id']) }}">
+        <input type="hidden" name="_csrf_token"
+               value="{{ csrf_token() }}">
+        <button type="submit" class="btn btn-danger btn-sm"
+                onclick="return confirm('Delete this project and all its cards?')">
+            Delete Project
+        </button>
+    </form>
+</div>
+
+<div class="cards-header">
+    <a class="btn"
+       href="{{ url_for('flashcards.create_card',
+                        project_id=project['id']) }}">
+        Add Card
+    </a>
 </div>
 
 {% if cards %}

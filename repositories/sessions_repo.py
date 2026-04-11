@@ -84,3 +84,24 @@ def get_unknown_card_ids(session_id):
         (session_id,),
     ).fetchall()
     return [r["card_id"] for r in rows]
+
+
+def add_session_cards(session_id, card_ids):
+    db = get_db()
+    for card_id in card_ids:
+        db.execute(
+            "INSERT INTO session_cards (session_id, card_id) "
+            "VALUES (?, ?)",
+            (session_id, card_id),
+        )
+    db.commit()
+
+
+def get_session_card_ids(session_id):
+    db = get_db()
+    rows = db.execute(
+        "SELECT card_id FROM session_cards "
+        "WHERE session_id = ?",
+        (session_id,),
+    ).fetchall()
+    return [r["card_id"] for r in rows]
