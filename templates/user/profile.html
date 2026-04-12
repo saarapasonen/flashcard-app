@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Profile — Flashcards{% endblock %}
+
+{% block content %}
+<h1>{{ session['username'] }}</h1>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <span class="stat-value">{{ total_projects }}</span>
+        <span class="stat-label">Projects</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-value">{{ total_cards }}</span>
+        <span class="stat-label">Flashcards</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-value">{{ total_sessions }}</span>
+        <span class="stat-label">Sessions</span>
+    </div>
+</div>
+
+<h2>Recent Sessions</h2>
+{% if recent_sessions %}
+    <table class="cards-table">
+        <thead>
+            <tr>
+                <th>Project</th>
+                <th>Date</th>
+                <th>Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in recent_sessions %}
+                <tr>
+                    <td>
+                        <a href="{{ url_for('projects.view_project',
+                                            project_id=s['project_id']) }}">
+                            {{ s['project_name'] }}
+                        </a>
+                    </td>
+                    <td>{{ s['created_at'] }}</td>
+                    <td>
+                        {{ (s['correct'] / s['total_cards'] * 100)
+                            | round | int }}%
+                        ({{ s['correct'] }}/{{ s['total_cards'] }})
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p class="empty">No completed sessions yet.</p>
+{% endif %}
+{% endblock %}

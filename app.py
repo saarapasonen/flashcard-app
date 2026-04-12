@@ -7,6 +7,7 @@ from routes.projects import projects_bp
 from routes.flashcards import flashcards_bp
 from routes.search import search_bp
 from routes.sessions import sessions_bp
+from routes.user import user_bp
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(32)
@@ -18,6 +19,7 @@ app.register_blueprint(projects_bp)
 app.register_blueprint(flashcards_bp)
 app.register_blueprint(search_bp)
 app.register_blueprint(sessions_bp)
+app.register_blueprint(user_bp)
 
 # Make csrf_token available in all templates
 app.jinja_env.globals["csrf_token"] = generate_csrf_token

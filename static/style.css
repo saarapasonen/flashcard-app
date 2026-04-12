@@ -58,7 +58,12 @@ a:hover {
 }
 
 .nav-user {
-    color: #94a3b8;
+    color: #cbd5e1;
+    font-weight: 600;
+}
+
+.nav-user:hover {
+    color: #fff;
 }
 
 .search-form {
@@ -439,6 +444,36 @@ a:hover {
     display: flex;
     justify-content: center;
     gap: 1rem;
+}
+
+/* ── Stats grid ────────────────────────────────────── */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 1.25rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2563eb;
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: #64748b;
 }
 
 /* ── Empty state ────────────────────────────────────── */
