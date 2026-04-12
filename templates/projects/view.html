@@ -72,23 +72,25 @@
                             {{ c['difficulty']|capitalize }}
                         </span>
                     </td>
-                    <td class="actions">
-                        <a href="{{ url_for('flashcards.edit_card',
-                                            project_id=project['id'],
-                                            card_id=c['id']) }}">
-                            Edit
-                        </a>
-                        <form method="post"
-                              action="{{ url_for(
-                                  'flashcards.delete_card',
-                                  project_id=project['id'],
-                                  card_id=c['id']) }}">
-                            <input type="hidden" name="_csrf_token"
-                                   value="{{ csrf_token() }}">
-                            <button type="submit" class="link-danger">
-                                Delete
-                            </button>
-                        </form>
+                    <td>
+                        <div class="actions">
+                            <a href="{{ url_for('flashcards.edit_card',
+                                                project_id=project['id'],
+                                                card_id=c['id']) }}">
+                                Edit
+                            </a>
+                            <form method="post"
+                                  action="{{ url_for(
+                                      'flashcards.delete_card',
+                                      project_id=project['id'],
+                                      card_id=c['id']) }}">
+                                <input type="hidden" name="_csrf_token"
+                                       value="{{ csrf_token() }}">
+                                <button type="submit" class="link-danger">
+                                    Delete
+                                </button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
             {% endfor %}
