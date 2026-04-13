@@ -10,6 +10,40 @@ def get_by_project(project_id):
     ).fetchall()
 
 
+def get_page(project_id, limit, offset, difficulty=None):
+    db = get_db()
+    if difficulty:
+        return db.execute(
+            "SELECT id, front, back, difficulty FROM flashcards "
+            "WHERE project_id = ? AND difficulty = ? "
+            "ORDER BY id LIMIT ? OFFSET ?",
+            (project_id, difficulty, limit, offset),
+        ).fetchall()
+    return db.execute(
+        "SELECT id, front, back, difficulty FROM flashcards "
+        "WHERE project_id = ? "
+        "ORDER BY id LIMIT ? OFFSET ?",
+        (project_id, limit, offset),
+    ).fetchall()
+
+
+def count_by_project(project_id, difficulty=None):
+    db = get_db()
+    if difficulty:
+        row = db.execute(
+            "SELECT COUNT(id) AS total FROM flashcards "
+            "WHERE project_id = ? AND difficulty = ?",
+            (project_id, difficulty),
+        ).fetchone()
+    else:
+        row = db.execute(
+            "SELECT COUNT(id) AS total FROM flashcards "
+            "WHERE project_id = ?",
+            (project_id,),
+        ).fetchone()
+    return row["total"]
+
+
 def get_by_id(card_id, project_id):
     db = get_db()
     return db.execute(

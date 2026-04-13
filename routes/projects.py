@@ -40,9 +40,32 @@ def view_project(project_id):
     if not project or project["user_id"] != session["user_id"]:
         abort(404)
 
-    cards = flashcards_repo.get_by_project(project_id)
+    per_page = 20
+    page = request.args.get("page", 1, type=int)
+    if page < 1:
+        page = 1
+    difficulty = request.args.get("difficulty", "").strip()
+    if difficulty not in ("easy", "medium", "hard"):
+        difficulty = None
+
+    total = flashcards_repo.count_by_project(
+        project_id, difficulty
+    )
+    total_pages = max(1, (total + per_page - 1) // per_page)
+    if page > total_pages:
+        page = total_pages
+    offset = (page - 1) * per_page
+
+    cards = flashcards_repo.get_page(
+        project_id, per_page, offset, difficulty
+    )
     return render_template(
-        "projects/view.html", project=project, cards=cards
+        "projects/view.html",
+        project=project,
+        cards=cards,
+        page=page,
+        total_pages=total_pages,
+        difficulty=difficulty or "",
     )
 
 

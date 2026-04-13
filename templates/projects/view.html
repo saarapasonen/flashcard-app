@@ -45,6 +45,31 @@
 </div>
 
 <div class="cards-header">
+    <div class="filter-bar">
+        <a href="{{ url_for('projects.view_project',
+                            project_id=project['id']) }}"
+           class="btn btn-sm {{ '' if difficulty else 'btn-active' }}">
+            All
+        </a>
+        <a href="{{ url_for('projects.view_project',
+                            project_id=project['id'],
+                            difficulty='easy') }}"
+           class="btn btn-sm {{ 'btn-active' if difficulty == 'easy' else '' }}">
+            Easy
+        </a>
+        <a href="{{ url_for('projects.view_project',
+                            project_id=project['id'],
+                            difficulty='medium') }}"
+           class="btn btn-sm {{ 'btn-active' if difficulty == 'medium' else '' }}">
+            Medium
+        </a>
+        <a href="{{ url_for('projects.view_project',
+                            project_id=project['id'],
+                            difficulty='hard') }}"
+           class="btn btn-sm {{ 'btn-active' if difficulty == 'hard' else '' }}">
+            Hard
+        </a>
+    </div>
     <a class="btn"
        href="{{ url_for('flashcards.create_card',
                         project_id=project['id']) }}">
@@ -96,6 +121,31 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if total_pages > 1 %}
+        <div class="pagination">
+            {% if page > 1 %}
+                <a class="btn btn-sm btn-secondary"
+                   href="{{ url_for('projects.view_project',
+                                    project_id=project['id'],
+                                    page=page - 1,
+                                    difficulty=difficulty) }}">
+                    Previous
+                </a>
+            {% endif %}
+            <span class="page-info">
+                Page {{ page }} of {{ total_pages }}
+            </span>
+            {% if page < total_pages %}
+                <a class="btn btn-sm btn-secondary"
+                   href="{{ url_for('projects.view_project',
+                                    project_id=project['id'],
+                                    page=page + 1,
+                                    difficulty=difficulty) }}">
+                    Next
+                </a>
+            {% endif %}
+        </div>
+    {% endif %}
 {% else %}
     <p class="empty">No flashcards yet. Add one above.</p>
 {% endif %}
