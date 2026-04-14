@@ -26,7 +26,8 @@ def create_project():
             flash("Project name is required.", "error")
             return render_template("projects/create.html")
 
-        projects_repo.create(session["user_id"], name)
+        is_public = 1 if request.form.get("is_public") else 0
+        projects_repo.create(session["user_id"], name, is_public)
         flash("Project created.", "success")
         return redirect(url_for("projects.list_projects"))
 
@@ -87,7 +88,8 @@ def edit_project(project_id):
                 "projects/edit.html", project=project
             )
 
-        projects_repo.update_name(project_id, name)
+        is_public = 1 if request.form.get("is_public") else 0
+        projects_repo.update(project_id, name, is_public)
         flash("Project updated.", "success")
         return redirect(
             url_for("projects.view_project", project_id=project_id)

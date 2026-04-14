@@ -3,7 +3,14 @@
 
 {% block content %}
 <div class="page-header">
-    <h1>{{ project['name'] }}</h1>
+    <div>
+        <h1>{{ project['name'] }}</h1>
+        {% if project['is_public'] %}
+            <span class="badge badge-public">Public</span>
+        {% else %}
+            <span class="badge badge-private">Private</span>
+        {% endif %}
+    </div>
     <div class="study-actions">
         <form method="post"
               action="{{ url_for('sessions.start_session',

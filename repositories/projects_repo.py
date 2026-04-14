@@ -4,7 +4,7 @@ from db import get_db
 def get_by_user(user_id):
     db = get_db()
     return db.execute(
-        "SELECT id, name, created_at FROM projects "
+        "SELECT id, name, is_public, created_at FROM projects "
         "WHERE user_id = ? ORDER BY created_at DESC",
         (user_id,),
     ).fetchall()
@@ -13,25 +13,27 @@ def get_by_user(user_id):
 def get_by_id(project_id):
     db = get_db()
     return db.execute(
-        "SELECT id, name, user_id, created_at FROM projects WHERE id = ?",
+        "SELECT id, name, user_id, is_public, created_at "
+        "FROM projects WHERE id = ?",
         (project_id,),
     ).fetchone()
 
 
-def create(user_id, name):
+def create(user_id, name, is_public=0):
     db = get_db()
     db.execute(
-        "INSERT INTO projects (user_id, name) VALUES (?, ?)",
-        (user_id, name),
+        "INSERT INTO projects (user_id, name, is_public) "
+        "VALUES (?, ?, ?)",
+        (user_id, name, is_public),
     )
     db.commit()
 
 
-def update_name(project_id, name):
+def update(project_id, name, is_public):
     db = get_db()
     db.execute(
-        "UPDATE projects SET name = ? WHERE id = ?",
-        (name, project_id),
+        "UPDATE projects SET name = ?, is_public = ? WHERE id = ?",
+        (name, is_public, project_id),
     )
     db.commit()
 
@@ -50,7 +52,7 @@ def search_by_name(user_id, query):
     db = get_db()
     like = f"%{query}%"
     return db.execute(
-        "SELECT id, name, created_at FROM projects "
+        "SELECT id, name, is_public, created_at FROM projects "
         "WHERE user_id = ? AND name LIKE ? ORDER BY name",
         (user_id, like),
     ).fetchall()

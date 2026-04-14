@@ -362,6 +362,27 @@ a:hover {
     background: #1d4ed8;
 }
 
+.visibility-field {
+    border: none;
+    padding: 0;
+}
+
+.visibility-field legend {
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+}
+
+.radio-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    margin-right: 1rem;
+    font-weight: normal;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
 .form-link {
     margin-top: 1rem;
     text-align: center;
@@ -390,6 +411,16 @@ a:hover {
 .badge-hard {
     background: #fee2e2;
     color: #991b1b;
+}
+
+.badge-public {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.badge-private {
+    background: #f1f5f9;
+    color: #475569;
 }
 
 /* ── Study session ─────────────────────────────────── */

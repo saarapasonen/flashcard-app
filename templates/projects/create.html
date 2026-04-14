@@ -8,6 +8,18 @@
         <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
         <label for="name">Project name</label>
         <input type="text" id="name" name="name" required>
+        <fieldset class="visibility-field">
+            <legend>Visibility</legend>
+            <label class="radio-label">
+                <input type="radio" name="is_public" value=""
+                       checked>
+                Private
+            </label>
+            <label class="radio-label">
+                <input type="radio" name="is_public" value="1">
+                Public
+            </label>
+        </fieldset>
         <button type="submit">Create</button>
     </form>
 </div>

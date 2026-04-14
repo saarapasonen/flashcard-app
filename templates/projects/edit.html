@@ -9,6 +9,19 @@
         <label for="name">Project name</label>
         <input type="text" id="name" name="name"
                value="{{ project['name'] }}" required>
+        <fieldset class="visibility-field">
+            <legend>Visibility</legend>
+            <label class="radio-label">
+                <input type="radio" name="is_public" value=""
+                    {% if not project['is_public'] %}checked{% endif %}>
+                Private
+            </label>
+            <label class="radio-label">
+                <input type="radio" name="is_public" value="1"
+                    {% if project['is_public'] %}checked{% endif %}>
+                Public
+            </label>
+        </fieldset>
         <button type="submit">Save</button>
     </form>
 </div>

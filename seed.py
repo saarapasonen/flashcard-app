@@ -22,16 +22,16 @@ USERS = [
 ]
 
 PROJECTS = [
-    (1, "Python Basics"),
-    (1, "Flask Web Development"),
-    (1, "SQL Fundamentals"),
-    (2, "JavaScript Essentials"),
-    (2, "Data Structures"),
-    (3, "World Capitals"),
-    (3, "Spanish Vocabulary"),
-    (4, "Biology 101"),
-    (4, "Chemistry Basics"),
-    (5, "History Dates"),
+    (1, "Python Basics", 1),
+    (1, "Flask Web Development", 0),
+    (1, "SQL Fundamentals", 1),
+    (2, "JavaScript Essentials", 1),
+    (2, "Data Structures", 0),
+    (3, "World Capitals", 1),
+    (3, "Spanish Vocabulary", 1),
+    (4, "Biology 101", 0),
+    (4, "Chemistry Basics", 1),
+    (5, "History Dates", 0),
 ]
 
 CARD_SETS = {
@@ -931,11 +931,12 @@ def seed():
     # Create projects and flashcards
     project_ids = {}
     total_cards = 0
-    for user_idx, project_name in PROJECTS:
+    for user_idx, project_name, is_public in PROJECTS:
         user_id = list(user_ids.values())[user_idx - 1]
         cursor = db.execute(
-            "INSERT INTO projects (user_id, name) VALUES (?, ?)",
-            (user_id, project_name),
+            "INSERT INTO projects (user_id, name, is_public) "
+            "VALUES (?, ?, ?)",
+            (user_id, project_name, is_public),
         )
         project_id = cursor.lastrowid
         project_ids[project_name] = project_id
@@ -954,7 +955,7 @@ def seed():
 
     # Create study sessions
     session_count = 0
-    for project_user_idx, project_name in PROJECTS:
+    for project_user_idx, project_name, _ in PROJECTS:
         user_id = list(user_ids.values())[project_user_idx - 1]
         project_id = project_ids[project_name]
 
