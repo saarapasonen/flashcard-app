@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Find Users — Flashcards{% endblock %}
+
+{% block content %}
+<h1>Find Users</h1>
+
+<form class="user-search-form" method="get"
+      action="{{ url_for('browse.search_users') }}">
+    <input type="text" name="q" placeholder="Search by username..."
+           value="{{ query }}">
+    <button type="submit" class="btn">Search</button>
+</form>
+
+{% if query %}
+    {% if results %}
+        <table class="cards-table">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for u in results %}
+                    <tr>
+                        <td>
+                            <a href="{{ url_for('browse.public_profile',
+                                                user_id=u['id']) }}">
+                                {{ u['username'] }}
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="empty">
+            No users found for "{{ query }}".
+        </p>
+    {% endif %}
+{% else %}
+    <p class="empty">
+        Enter a username above to find other users.
+    </p>
+{% endif %}
+{% endblock %}

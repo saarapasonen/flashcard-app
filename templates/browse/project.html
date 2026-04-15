@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}{{ project['name'] }} by {{ user['username'] }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>{{ project['name'] }}</h1>
+        <p class="meta">
+            By
+            <a href="{{ url_for('browse.public_profile',
+                                user_id=user['id']) }}">
+                {{ user['username'] }}
+            </a>
+        </p>
+    </div>
+</div>
+
+{% if cards %}
+    <table class="cards-table">
+        <thead>
+            <tr>
+                <th>Front</th>
+                <th>Back</th>
+                <th>Difficulty</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in cards %}
+                <tr>
+                    <td>{{ c['front'] }}</td>
+                    <td>{{ c['back'] }}</td>
+                    <td>
+                        <span class="badge badge-{{ c['difficulty'] }}">
+                            {{ c['difficulty']|capitalize }}
+                        </span>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p class="empty">No flashcards in this project.</p>
+{% endif %}
+{% endblock %}

@@ -5,16 +5,17 @@
 <h1>Search Results</h1>
 
 {% if query %}
-    {% if not projects and not cards %}
+    {% if not my_projects and not cards and not public_projects
+          and not found_users %}
         <p class="empty">
             No results for "<strong>{{ query }}</strong>".
         </p>
     {% endif %}
 
-    {% if projects %}
-        <h2>Projects</h2>
+    {% if my_projects %}
+        <h2>My Projects</h2>
         <div class="project-grid">
-            {% for p in projects %}
+            {% for p in my_projects %}
                 <div class="card">
                     <h2>
                         <a href="{{ url_for('projects.view_project',
@@ -22,14 +23,19 @@
                             {{ p['name'] }}
                         </a>
                     </h2>
-                    <p class="meta">Created {{ p['created_at'] }}</p>
+                    <p class="meta">
+                        Created {{ p['created_at'] }}
+                        {% if p['is_public'] %}
+                            <span class="badge badge-public">Public</span>
+                        {% endif %}
+                    </p>
                 </div>
             {% endfor %}
         </div>
     {% endif %}
 
     {% if cards %}
-        <h2>Flashcards</h2>
+        <h2>My Flashcards</h2>
         <p>{{ cards|length }} card{{ 's' if cards|length != 1 }}
            matching "<strong>{{ query }}</strong>"</p>
         <table class="cards-table">
@@ -57,9 +63,57 @@
             </tbody>
         </table>
     {% endif %}
+
+    {% if public_projects %}
+        <h2>Public Projects</h2>
+        <div class="project-grid">
+            {% for p in public_projects %}
+                <div class="card">
+                    <h2>
+                        <a href="{{ url_for('browse.public_project',
+                                            user_id=p['owner_id'],
+                                            project_id=p['id']) }}">
+                            {{ p['name'] }}
+                        </a>
+                    </h2>
+                    <p class="meta">
+                        By
+                        <a href="{{ url_for('browse.public_profile',
+                                            user_id=p['owner_id']) }}">
+                            {{ p['owner_name'] }}
+                        </a>
+                    </p>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if found_users %}
+        <h2>Users</h2>
+        <table class="cards-table">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for u in found_users %}
+                    <tr>
+                        <td>
+                            <a href="{{ url_for('browse.public_profile',
+                                                user_id=u['id']) }}">
+                                {{ u['username'] }}
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
 {% else %}
     <p class="empty">
-        Enter a keyword above to search your projects and flashcards.
+        Enter a keyword above to search projects, flashcards,
+        and users.
     </p>
 {% endif %}
 {% endblock %}

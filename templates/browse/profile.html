@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}{{ user['username'] }} — Flashcards{% endblock %}
+
+{% block content %}
+<h1>{{ user['username'] }}</h1>
+
+{% if projects %}
+    <h2>Public Projects</h2>
+    <div class="project-grid">
+        {% for p in projects %}
+            <div class="card">
+                <h2>
+                    <a href="{{ url_for('browse.public_project',
+                                        user_id=user['id'],
+                                        project_id=p['id']) }}">
+                        {{ p['name'] }}
+                    </a>
+                </h2>
+                <p class="meta">Created {{ p['created_at'] }}</p>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p class="empty">This user has no public projects.</p>
+{% endif %}
+{% endblock %}
