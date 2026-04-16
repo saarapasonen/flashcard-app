@@ -974,8 +974,8 @@ def seed():
             cursor = db.execute(
                 "INSERT INTO study_sessions "
                 "(user_id, project_id, total_cards, "
-                "correct, completed) "
-                "VALUES (?, ?, ?, ?, 1)",
+                "correct, status) "
+                "VALUES (?, ?, ?, ?, 'completed')",
                 (user_id, project_id, num_cards, correct),
             )
             session_id = cursor.lastrowid

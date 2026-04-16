@@ -64,5 +64,18 @@
             </form>
         {% endif %}
     </div>
+
+    <div class="study-save">
+        <form method="post"
+              action="{{ url_for('sessions.save_session',
+                  project_id=project['id'],
+                  session_id=session_id) }}">
+            <input type="hidden" name="_csrf_token"
+                   value="{{ csrf_token() }}">
+            <button type="submit" class="btn btn-secondary btn-sm">
+                Save and continue later
+            </button>
+        </form>
+    </div>
 </div>
 {% endblock %}

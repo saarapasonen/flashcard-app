@@ -27,7 +27,7 @@ def count_completed_sessions(user_id):
     db = get_db()
     row = db.execute(
         "SELECT COUNT(id) AS total FROM study_sessions "
-        "WHERE user_id = ? AND completed = 1",
+        "WHERE user_id = ? AND status = 'completed'",
         (user_id,),
     ).fetchone()
     return row["total"]

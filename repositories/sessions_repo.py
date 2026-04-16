@@ -17,7 +17,7 @@ def get_by_id(session_id):
     db = get_db()
     return db.execute(
         "SELECT id, user_id, project_id, total_cards, "
-        "       correct, completed, created_at "
+        "       correct, status, created_at "
         "FROM study_sessions WHERE id = ?",
         (session_id,),
     ).fetchone()
@@ -47,7 +47,8 @@ def count_answers(session_id):
 def complete_session(session_id, correct):
     db = get_db()
     db.execute(
-        "UPDATE study_sessions SET completed = 1, correct = ? "
+        "UPDATE study_sessions "
+        "SET status = 'completed', correct = ? "
         "WHERE id = ?",
         (correct, session_id),
     )
@@ -64,13 +65,27 @@ def get_answered_card_ids(session_id):
     return [r["card_id"] for r in rows]
 
 
-def get_latest_session(user_id, project_id):
+def get_latest_completed(user_id, project_id):
     db = get_db()
     return db.execute(
         "SELECT id, user_id, project_id, total_cards, "
-        "       correct, completed, created_at "
+        "       correct, status, created_at "
         "FROM study_sessions "
-        "WHERE user_id = ? AND project_id = ? AND completed = 1 "
+        "WHERE user_id = ? AND project_id = ? "
+        "  AND status = 'completed' "
+        "ORDER BY created_at DESC LIMIT 1",
+        (user_id, project_id),
+    ).fetchone()
+
+
+def get_in_progress(user_id, project_id):
+    db = get_db()
+    return db.execute(
+        "SELECT id, user_id, project_id, total_cards, "
+        "       correct, status, created_at "
+        "FROM study_sessions "
+        "WHERE user_id = ? AND project_id = ? "
+        "  AND status = 'in_progress' "
         "ORDER BY created_at DESC LIMIT 1",
         (user_id, project_id),
     ).fetchone()

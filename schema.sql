@@ -27,7 +27,8 @@ CREATE TABLE IF NOT EXISTS study_sessions (
     project_id  INTEGER NOT NULL REFERENCES projects(id),
     total_cards INTEGER NOT NULL,
     correct     INTEGER NOT NULL DEFAULT 0,
-    completed   INTEGER NOT NULL DEFAULT 0,
+    status      TEXT NOT NULL DEFAULT 'in_progress'
+        CHECK (status IN ('in_progress', 'completed')),
     created_at  TEXT NOT NULL DEFAULT (datetime('now'))
 );
 

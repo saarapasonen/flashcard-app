@@ -26,7 +26,7 @@ def get_owned_project(project_id):
 @login_required
 @validate_csrf
 def start_session(project_id):
-    project = get_owned_project(project_id)
+    get_owned_project(project_id)
     cards = flashcards_repo.get_by_project(project_id)
 
     if not cards:
@@ -50,6 +50,35 @@ def start_session(project_id):
 
 
 @sessions_bp.route(
+    "/projects/<int:project_id>/resume",
+    methods=["POST"],
+)
+@login_required
+@validate_csrf
+def resume_session(project_id):
+    get_owned_project(project_id)
+    in_progress = sessions_repo.get_in_progress(
+        session["user_id"], project_id
+    )
+
+    if not in_progress:
+        flash("No session to resume.", "error")
+        return redirect(
+            url_for(
+                "projects.view_project", project_id=project_id
+            )
+        )
+
+    return redirect(
+        url_for(
+            "sessions.study_card",
+            project_id=project_id,
+            session_id=in_progress["id"],
+        )
+    )
+
+
+@sessions_bp.route(
     "/projects/<int:project_id>/continue",
     methods=["POST"],
 )
@@ -57,7 +86,7 @@ def start_session(project_id):
 @validate_csrf
 def continue_session(project_id):
     get_owned_project(project_id)
-    latest = sessions_repo.get_latest_session(
+    latest = sessions_repo.get_latest_completed(
         session["user_id"], project_id
     )
 
@@ -71,7 +100,9 @@ def continue_session(project_id):
 
     unknown_ids = sessions_repo.get_unknown_card_ids(latest["id"])
     if not unknown_ids:
-        flash("You knew all cards in your last session!", "success")
+        flash(
+            "You knew all cards in your last session!", "success"
+        )
         return redirect(
             url_for(
                 "projects.view_project", project_id=project_id
@@ -214,6 +245,27 @@ def answer_card(project_id, session_id):
 
 
 @sessions_bp.route(
+    "/projects/<int:project_id>/study/<int:session_id>/save",
+    methods=["POST"],
+)
+@login_required
+@validate_csrf
+def save_session(project_id, session_id):
+    get_owned_project(project_id)
+    study = sessions_repo.get_by_id(session_id)
+
+    if not study or study["user_id"] != session["user_id"]:
+        abort(404)
+
+    flash("Session saved. You can resume it later.", "success")
+    return redirect(
+        url_for(
+            "projects.view_project", project_id=project_id
+        )
+    )
+
+
+@sessions_bp.route(
     "/projects/<int:project_id>/study/<int:session_id>/results",
 )
 @login_required
@@ -226,10 +278,13 @@ def session_results(project_id, session_id):
 
     answered, correct = sessions_repo.count_answers(session_id)
 
-    if not study["completed"] and answered == study["total_cards"]:
+    if (study["status"] == "in_progress"
+            and answered == study["total_cards"]):
         sessions_repo.complete_session(session_id, correct)
 
-    percentage = round(correct / answered * 100) if answered else 0
+    percentage = (
+        round(correct / answered * 100) if answered else 0
+    )
 
     return render_template(
         "sessions/results.html",

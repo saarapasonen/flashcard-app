@@ -471,6 +471,11 @@ a:hover {
     margin-top: 1rem;
 }
 
+.study-save {
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
 /* ── Results ───────────────────────────────────────── */
 .results-page {
     max-width: 500px;
