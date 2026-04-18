@@ -91,6 +91,18 @@ def get_in_progress(user_id, project_id):
     ).fetchone()
 
 
+def get_latest_session(user_id, project_id):
+    db = get_db()
+    return db.execute(
+        "SELECT id, user_id, project_id, total_cards, "
+        "       correct, status, created_at "
+        "FROM study_sessions "
+        "WHERE user_id = ? AND project_id = ? "
+        "ORDER BY created_at DESC LIMIT 1",
+        (user_id, project_id),
+    ).fetchone()
+
+
 def get_unknown_card_ids(session_id):
     db = get_db()
     rows = db.execute(
@@ -99,6 +111,33 @@ def get_unknown_card_ids(session_id):
         (session_id,),
     ).fetchall()
     return [r["card_id"] for r in rows]
+
+
+def get_unseen_card_ids(session_id, project_id):
+    db = get_db()
+    session_card_ids = get_session_card_ids(session_id)
+    if session_card_ids:
+        placeholders = ",".join("?" * len(session_card_ids))
+        rows = db.execute(
+            "SELECT id FROM flashcards "
+            "WHERE id IN (" + placeholders + ") "
+            "AND id NOT IN ("
+            "  SELECT card_id FROM session_answers "
+            "  WHERE session_id = ?"
+            ") ORDER BY id",
+            session_card_ids + [session_id],
+        ).fetchall()
+    else:
+        rows = db.execute(
+            "SELECT id FROM flashcards "
+            "WHERE project_id = ? "
+            "AND id NOT IN ("
+            "  SELECT card_id FROM session_answers "
+            "  WHERE session_id = ?"
+            ") ORDER BY id",
+            (project_id, session_id),
+        ).fetchall()
+    return [r["id"] for r in rows]
 
 
 def add_session_cards(session_id, card_ids):

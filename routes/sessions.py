@@ -50,35 +50,6 @@ def start_session(project_id):
 
 
 @sessions_bp.route(
-    "/projects/<int:project_id>/resume",
-    methods=["POST"],
-)
-@login_required
-@validate_csrf
-def resume_session(project_id):
-    get_owned_project(project_id)
-    in_progress = sessions_repo.get_in_progress(
-        session["user_id"], project_id
-    )
-
-    if not in_progress:
-        flash("No session to resume.", "error")
-        return redirect(
-            url_for(
-                "projects.view_project", project_id=project_id
-            )
-        )
-
-    return redirect(
-        url_for(
-            "sessions.study_card",
-            project_id=project_id,
-            session_id=in_progress["id"],
-        )
-    )
-
-
-@sessions_bp.route(
     "/projects/<int:project_id>/continue",
     methods=["POST"],
 )
@@ -86,7 +57,7 @@ def resume_session(project_id):
 @validate_csrf
 def continue_session(project_id):
     get_owned_project(project_id)
-    latest = sessions_repo.get_latest_completed(
+    latest = sessions_repo.get_latest_session(
         session["user_id"], project_id
     )
 
@@ -98,8 +69,13 @@ def continue_session(project_id):
             )
         )
 
+    unseen_ids = sessions_repo.get_unseen_card_ids(
+        latest["id"], project_id
+    )
     unknown_ids = sessions_repo.get_unknown_card_ids(latest["id"])
-    if not unknown_ids:
+    card_ids = unseen_ids + unknown_ids
+
+    if not card_ids:
         flash(
             "You knew all cards in your last session!", "success"
         )
@@ -110,9 +86,9 @@ def continue_session(project_id):
         )
 
     session_id = sessions_repo.create_session(
-        session["user_id"], project_id, len(unknown_ids)
+        session["user_id"], project_id, len(card_ids)
     )
-    sessions_repo.add_session_cards(session_id, unknown_ids)
+    sessions_repo.add_session_cards(session_id, card_ids)
 
     return redirect(
         url_for(

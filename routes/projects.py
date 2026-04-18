@@ -4,7 +4,7 @@ from flask import (
 )
 from csrf import validate_csrf
 from auth_utils import login_required
-from repositories import projects_repo, flashcards_repo, sessions_repo
+from repositories import projects_repo, flashcards_repo
 
 projects_bp = Blueprint("projects", __name__)
 
@@ -60,9 +60,6 @@ def view_project(project_id):
     cards = flashcards_repo.get_page(
         project_id, per_page, offset, difficulty
     )
-    in_progress = sessions_repo.get_in_progress(
-        session["user_id"], project_id
-    )
     return render_template(
         "projects/view.html",
         project=project,
@@ -70,7 +67,6 @@ def view_project(project_id):
         page=page,
         total_pages=total_pages,
         difficulty=difficulty or "",
-        in_progress=in_progress,
     )
 
 
