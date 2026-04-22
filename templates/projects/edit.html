@@ -11,13 +11,15 @@
                value="{{ project['name'] }}" required>
         <fieldset class="visibility-field">
             <legend>Visibility</legend>
-            <label class="radio-label">
-                <input type="radio" name="is_public" value=""
+            <label for="vis-private" class="radio-label">
+                <input type="radio" id="vis-private"
+                       name="is_public" value=""
                     {% if not project['is_public'] %}checked{% endif %}>
                 Private
             </label>
-            <label class="radio-label">
-                <input type="radio" name="is_public" value="1"
+            <label for="vis-public" class="radio-label">
+                <input type="radio" id="vis-public"
+                       name="is_public" value="1"
                     {% if project['is_public'] %}checked{% endif %}>
                 Public
             </label>

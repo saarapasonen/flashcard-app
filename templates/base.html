@@ -15,7 +15,8 @@
             {% if session.get('user_id') %}
                 <form class="search-form" action="{{ url_for('search.search') }}"
                       method="get">
-                    <input type="text" name="q"
+                    <label for="nav-search" class="sr-only">Search</label>
+                    <input type="text" id="nav-search" name="q"
                            placeholder="Search projects, cards, users..."
                            value="{{ request.args.get('q', '') }}">
                     <button type="submit">Search</button>

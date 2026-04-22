@@ -10,13 +10,14 @@
         <input type="text" id="name" name="name" required>
         <fieldset class="visibility-field">
             <legend>Visibility</legend>
-            <label class="radio-label">
-                <input type="radio" name="is_public" value=""
-                       checked>
+            <label for="vis-private" class="radio-label">
+                <input type="radio" id="vis-private"
+                       name="is_public" value="" checked>
                 Private
             </label>
-            <label class="radio-label">
-                <input type="radio" name="is_public" value="1">
+            <label for="vis-public" class="radio-label">
+                <input type="radio" id="vis-public"
+                       name="is_public" value="1">
                 Public
             </label>
         </fieldset>
