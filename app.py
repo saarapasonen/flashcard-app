@@ -1,6 +1,6 @@
 import secrets
 from flask import Flask
-from db import close_db, init_db, get_db
+from db import close_db, init_db
 from csrf import generate_csrf_token
 from routes.auth import auth_bp
 from routes.projects import projects_bp

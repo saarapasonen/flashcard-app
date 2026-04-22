@@ -288,6 +288,7 @@ a:hover {
     border-radius: 8px;
     overflow: hidden;
     border: 1px solid #e2e8f0;
+    table-layout: fixed;
 }
 
 .cards-table th,
@@ -305,8 +306,9 @@ a:hover {
     color: #475569;
 }
 
-.cards-table td {
+.cards-table td.card-text {
     white-space: pre-wrap;
+    word-wrap: break-word;
 }
 
 .actions {

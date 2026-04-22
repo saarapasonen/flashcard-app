@@ -1,5 +1,5 @@
-from db import get_db
 from werkzeug.security import generate_password_hash
+from db import get_db
 
 
 def find_by_username(username):

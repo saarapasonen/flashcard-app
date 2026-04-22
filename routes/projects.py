@@ -42,9 +42,7 @@ def view_project(project_id):
         abort(404)
 
     per_page = 20
-    page = request.args.get("page", 1, type=int)
-    if page < 1:
-        page = 1
+    page = max(request.args.get("page", 1, type=int), 1)
     difficulty = request.args.get("difficulty", "").strip()
     if difficulty not in ("easy", "medium", "hard"):
         difficulty = None
@@ -53,8 +51,7 @@ def view_project(project_id):
         project_id, difficulty
     )
     total_pages = max(1, (total + per_page - 1) // per_page)
-    if page > total_pages:
-        page = total_pages
+    page = min(page, total_pages)
     offset = (page - 1) * per_page
 
     cards = flashcards_repo.get_page(

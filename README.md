@@ -57,6 +57,18 @@ flashcards/
 └── README.md
 ```
 
+## Code quality
+
+Pylint was used to check code quality. The full report is in `pylint-report.md`.
+
+```bash
+pip install pylint
+pylint app.py db.py csrf.py auth_utils.py seed.py routes/*.py repositories/*.py
+```
+
+Current score: **8.60 / 10**. Remaining warnings are mostly missing docstrings on
+short, self-documenting functions and modules.
+
 ## Tech stack
 
 - Backend; Python, Flask

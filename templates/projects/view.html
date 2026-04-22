@@ -86,6 +86,12 @@
 
 {% if cards %}
     <table class="cards-table">
+        <colgroup>
+            <col style="width: 30%">
+            <col style="width: 30%">
+            <col style="width: 15%">
+            <col style="width: 25%">
+        </colgroup>
         <thead>
             <tr>
                 <th>Front</th>
@@ -97,8 +103,8 @@
         <tbody>
             {% for c in cards %}
                 <tr>
-                    <td>{{ c['front'] }}</td>
-                    <td>{{ c['back'] }}</td>
+                    <td class="card-text">{{ c['front'] }}</td>
+                    <td class="card-text">{{ c['back'] }}</td>
                     <td>
                         <span class="badge badge-{{ c['difficulty'] }}">
                             {{ c['difficulty']|capitalize }}
