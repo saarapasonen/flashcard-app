@@ -15,9 +15,47 @@
     </div>
     <div class="stat-card">
         <span class="stat-value">{{ total_sessions }}</span>
-        <span class="stat-label">Sessions</span>
+        <span class="stat-label">Completed Sessions</span>
     </div>
 </div>
+
+<h2>My Projects</h2>
+{% if projects %}
+    <table class="cards-table">
+        <thead>
+            <tr>
+                <th>Project</th>
+                <th>Created</th>
+                <th>Latest Session</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in projects %}
+                <tr>
+                    <td>
+                        <a href="{{ url_for('projects.view_project',
+                                            project_id=p['id']) }}">
+                            {{ p['name'] }}
+                        </a>
+                    </td>
+                    <td>{{ p['created_at'] }}</td>
+                    <td>
+                        {% if p['correct'] is not none %}
+                            {{ (p['correct'] / p['total_cards'] * 100)
+                                | round | int }}%
+                            ({{ p['correct'] }}/{{ p['total_cards'] }})
+                            — {{ p['session_date'] }}
+                        {% else %}
+                            No sessions yet
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p class="empty">No projects yet.</p>
+{% endif %}
 
 <h2>Recent Sessions</h2>
 {% if recent_sessions %}

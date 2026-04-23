@@ -33,6 +33,25 @@ def count_completed_sessions(user_id):
     return row["total"]
 
 
+def get_projects_with_latest_session(user_id):
+    db = get_db()
+    return db.execute(
+        "SELECT p.id, p.name, p.created_at, "
+        "       s.correct, s.total_cards, "
+        "       s.created_at AS session_date "
+        "FROM projects p "
+        "LEFT JOIN study_sessions s ON s.id = ("
+        "  SELECT s2.id FROM study_sessions s2 "
+        "  WHERE s2.project_id = p.id "
+        "    AND s2.status = 'completed' "
+        "  ORDER BY s2.created_at DESC LIMIT 1"
+        ") "
+        "WHERE p.user_id = ? "
+        "ORDER BY p.created_at DESC",
+        (user_id,),
+    ).fetchall()
+
+
 def get_recent_sessions(user_id, limit=10):
     db = get_db()
     return db.execute(

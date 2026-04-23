@@ -13,6 +13,7 @@ def profile():
     total_projects = stats_repo.count_projects(user_id)
     total_cards = stats_repo.count_flashcards(user_id)
     total_sessions = stats_repo.count_completed_sessions(user_id)
+    projects = stats_repo.get_projects_with_latest_session(user_id)
     recent_sessions = stats_repo.get_recent_sessions(user_id)
 
     return render_template(
@@ -20,5 +21,6 @@ def profile():
         total_projects=total_projects,
         total_cards=total_cards,
         total_sessions=total_sessions,
+        projects=projects,
         recent_sessions=recent_sessions,
     )
