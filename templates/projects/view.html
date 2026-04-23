@@ -44,8 +44,7 @@
                              project_id=project['id']) }}">
         <input type="hidden" name="_csrf_token"
                value="{{ csrf_token() }}">
-        <button type="submit" class="btn btn-danger btn-sm"
-                onclick="return confirm('Delete this project and all its cards?')">
+        <button type="submit" class="btn btn-danger btn-sm">
             Delete Project
         </button>
     </form>

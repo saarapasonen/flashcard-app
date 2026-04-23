@@ -40,7 +40,7 @@ def get_recent_sessions(user_id, limit=10):
         "       p.name AS project_name, p.id AS project_id "
         "FROM study_sessions s "
         "JOIN projects p ON s.project_id = p.id "
-        "WHERE s.user_id = ? AND s.completed = 1 "
+        "WHERE s.user_id = ? AND s.status = 'completed' "
         "ORDER BY s.created_at DESC LIMIT ?",
         (user_id, limit),
     ).fetchall()
