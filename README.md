@@ -6,11 +6,11 @@ A web application for creating and studying flashcards, built with Python and Fl
 
 - User registration and login with secure password hashing
 - Create, edit, and delete projects (collections of flashcards)
-- Public and private projects — public projects are visible to other users
+- Public and private projects; public projects are visible to other users
 - Create, edit, and delete flashcards with Easy / Medium / Hard difficulty tags
-- Study sessions — go through cards one by one, reveal the answer, mark as known or unknown
+- Study sessions; go through cards one by one, reveal the answer, mark as known or unknown
 - Save progress mid-session and continue later
-- Smart continue — repeats unseen and unknown cards from the previous session
+- Smart continue; repeats unseen and unknown cards from the previous session
 - User profile page with stats: total projects, flashcards, completed sessions
 - Unified search across own projects, flashcards, other users, and public projects
 - Pagination with difficulty filtering on the flashcard list (20 cards per page)
@@ -68,8 +68,8 @@ flashcards/
 1. Run `python3 seed.py` to populate the database with test data
 2. Start the app with `flask run`
 3. Log in as any seed user (e.g. `alice` / `password123`)
-4. Open a project and browse flashcards — try the difficulty filter and pagination
-5. Click "Study All Cards" to start a study session — answer cards and see the results
+4. Open a project and browse flashcards - try the difficulty filter and pagination
+5. Click "Study All Cards" to start a study session - answer cards and see the results
 6. Click "Save and continue later" during a session, then use "Continue" to resume
 7. Search for "bob" or "python" in the search bar to find users and public projects
 8. Visit another user's public profile and view their public projects (read-only)
